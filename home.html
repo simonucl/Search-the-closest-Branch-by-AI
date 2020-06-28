@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<title>Candice</title>
+
+<head>
+  <link rel="shortcut icon" type="image/x-icon" href="https://2019.hacktheburgh.com/static/htb-preview.png" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+    }
+
+    h1 {
+      background-color: black;
+      color: white;
+      display: inline-block;
+      font-size: 3em;
+      margin: 0;
+      padding: 14px;
+    }
+
+    h3 {
+      color: darkred;
+      font-size: 20px;
+      margin-top: 3px;
+      text-align: center;
+    }
+
+    #chatbox {
+      margin-left: auto;
+      margin-right: auto;
+      width: 40%;
+      margin-top: 60px;
+    }
+
+    #userInput {
+      margin-left: auto;
+      margin-right: auto;
+      width: 40%;
+      margin-top: 60px;
+    }
+
+    #textInput {
+      width: 90%;
+      border: none;
+      border-bottom: 3px solid black;
+      font-family: monospace;
+      font-size: 17px;
+    }
+
+    .userText {
+      color: white;
+      font-family: monospace;
+      font-size: 17px;
+      text-align: right;
+      line-height: 30px;
+    }
+
+    .userText span {
+      background-color: #808080;
+      padding: 10px;
+      border-radius: 2px;
+    }
+
+    .botText {
+      color: white;
+      font-family: monospace;
+      font-size: 17px;
+      text-align: left;
+      line-height: 30px;
+    }
+
+    .botText span {
+      background-color: #808080;
+      padding: 10px;
+      border-radius: 2px;
+    }
+
+    #tidbit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%
+    }
+
+    .boxed {
+      margin-left: auto;
+      margin-right: auto;
+      width: 78%;
+      margin-top: 60px;
+      border: 1px solid green;
+    }
+
+    .box {
+      border: 2px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <img />
+  <center>
+    <h1>
+      <img src="https://www.pngkey.com/png/full/199-1994993_banks-group-gray-clip-art-at-clkercom-clipart.png"
+        alt="CANDICE" style="width:60px;height:60px;" />Your Personal Banking AI<img
+        src="https://www.pngkey.com/png/full/199-1994993_banks-group-gray-clip-art-at-clkercom-clipart.png"
+        alt="CANDICE" style="width:60px;height:60px;" />
+    </h1>
+  </center>
+  
+  <div class="box"></div>
+  <div class="boxed">
+    <div>
+
+      <div id="chatbox">
+        <img src="https://freedesignfile.com/upload/2019/10/Blond-curly-hair-pretty-girl-cartoon-portrait-vector.jpg"
+          alt="CANDICE" style="width:40px;height:40px;" />
+        <p class="botText">
+          <span>Hi! I'm Candice your personal Bank AI</span>
+          <div id="map"></div>
+        </p>
+      </div>
+      <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Message" />
+      </div>
+    </div>
+
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: -34.397, lng: 150.644 },
+          zoom: 10
+        });
+      }
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOTRWN2MJGlcCcrqCy4XF7n4Z4LJtx_o4&callback=initMap"></script>
+    <script>
+      var bool = false;
+      function getBotResponse() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/get", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+
+      function greetings() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/greeting", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+
+      function getATM() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/getATM", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+
+      function getATMLong() {
+        var rawText = $("#textInput").val();
+        var data = $.get("/getATMLong", { msg: rawText }).done(function (data) {
+          return data;
+        })
+        return data;
+      }
+
+      function getATMLati() {
+        var rawText = $("#textInput").val();
+        var data = $.get("/getATMLati", { msg: rawText }).done(function (data) {
+          return data;
+        })
+        return data;
+      }
+      function getBranchesLong() {
+        var rawText = $("#textInput").val();
+        var data = $.get("/getBranchesLong", { msg: rawText }).done(function (data) {
+          return data;
+        })
+        return data;
+      }
+
+      function getBranchesLati() {
+        var rawText = $("#textInput").val();
+        var data = $.get("/getBranchesLati", { msg: rawText }).done(function (data) {
+          return data;
+        })
+        return data;
+      }
+
+      function choosing() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/choosing", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+
+      function gotPostcode_() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/gotPostcode", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+      function getBotResponse1() {
+        var rawText = $("#textInput").val();
+        $.get("/get", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          $("#textInput").val("");
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+      function userOutput(x) {
+        var userHtml = '<p class="userText"><span>' + x + "</span></p>";
+
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+
+      function getBranches() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/getBranches", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+
+      function getvalidPostcode(test) {
+        var rawText = $("#textInput").val();
+        $.get("/getvalidPostcode", { msg: rawText }).done(function (data) {
+          if (data == "1") {
+            test = true;
+          }
+          else {
+            test = false;
+          }
+          alert(test);
+        })
+        alert(test);
+        return test;
+      }
+
+      function botOutput(x) {
+        var userHtml = '<p class="botText"><span>' + x + "</span></p>";
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+      function cleanInput() {
+        $("#textInput").val("");
+      }
+      function initialiseTheChat() {
+        userOutput("Hello");
+        botOutput("Hi.Nice to meet you.");
+        botOutput("My name is Candice.\nWhat is your name?");
+      }
+
+      function list_available() { }
+
+      //Mainfunction:
+      var hasGreeted = false;
+      var hasChosen = false;
+      var validPostcode = false;
+      var specficBank = false;
+      var gotPostcode = false;
+      var chosen = 0;
+      initialiseTheChat();
+      $("#textInput").keypress(function (e) {
+        if (e.which == 13) {
+          var rawText = $("#textInput").val();
+          if (hasGreeted == false) {
+            if (rawText.length > 1) {
+              greetings();
+              hasGreeted = true;
+              botOutput("What can I help?</br>1. Find your nearest Bank.<br>2.Find your nearest ATM.<br>3. Exit.<br>(Please input the number");
+            }
+          }
+          else if (hasChosen == false) {
+            if (rawText == 1 || rawText == 2 || rawText == 3) {
+              chosen = rawText;
+              hasChosen = true;
+              choosing();
+            }
+            else {
+              botOutput("You have input invalid number, please input again.");
+              cleanInput();
+            }
+          }
+          else if (validPostcode == false) {
+            if (chosen == 2) {
+              var rawText = $("#textInput").val();
+              $.get("/getvalidPostcode", { msg: rawText }).done(function (data) {
+                if (data == "1") {
+                  $.get("/getATMLati", { msg: rawText }).done(function (lati) {
+                    $.get("/getATMLong", { msg: rawText }).done(function (long) {
+                      var long_ = parseFloat(long);
+                      var lati_ = parseFloat(lati);
+                      console.log(long_);
+                      console.log(lati_);
+                      map.setCenter({ lat: lati_, lng: long_ });
+                    })
+                  })
+                  getATM();
+                  validPostcode = true;
+                  specficBank = true;
+                }
+                else {
+                  botOutput("Invalid Postcode. Please input again.");
+                }
+              })
+            }
+            else {
+              $.get("/getvalidPostcode", { msg: rawText }).done(function (data) {
+                if (data == "1" || gotPostcode== true) {
+                  if (gotPostcode == false) {
+                    gotPostcode_();
+                    gotPostcode = true;
+                  
+                  }
+                  else {
+                    if (specficBank == false) {
+                      $.get("/getBranchesLati", { msg: rawText }).done(function (lati) {
+                        $.get("/getBranchesLong", { msg: rawText }).done(function (long) {
+                          var lati_ = parseFloat(lati);
+                          var long_ = parseFloat(long);
+                          map.setCenter({ lat: lati_, lng: long_ });
+                          getBranches();
+                          specficBank = true;
+                        });
+                      });
+                    }
+                  }
+                }
+                else {
+                  botOutput("Invalid Postcode. Please input again.")
+
+                }
+
+              })
+            }
+          };
+
+        }
+      }
+
+      );
+    </script>
+  </div>
+</body>
+
+</html>
